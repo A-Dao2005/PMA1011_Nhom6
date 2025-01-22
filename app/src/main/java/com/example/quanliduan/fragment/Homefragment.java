@@ -82,8 +82,143 @@ public class Homefragment extends Fragment {
     //    sharedViewModel.setExpenses(list);
     }
 
-  //2
-  //1
+    private void showdialogadd() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialogadd, null);
+        builder.setView(view);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        // Khởi tạo các trường nhập liệu trong dialog
+        EditText nameEditText = view.findViewById(R.id.edt_ten);
+        EditText priceEditText = view.findViewById(R.id.edt_gia);
+        EditText noteEditText = view.findViewById(R.id.edt_ghichu);
+        TextView dateTextView = view.findViewById(R.id.txt_date);
+        Button saveButton = view.findViewById(R.id.btn_add);
+
+        // Khởi tạo biến lưu ngày được chọn
+        final String[] selectedDate = {""};
+
+        // Sự kiện cho TextView date để mở DatePickerDialog
+        dateTextView.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view1, year1, month1, dayOfMonth1) -> {
+                // Cập nhật ngày chọn vào TextView
+                selectedDate[0] = String.format("%d-%02d-%02d", year1, month1 + 1, dayOfMonth1);
+                dateTextView.setText(selectedDate[0]);
+            }, year, month, dayOfMonth);
+
+            datePickerDialog.show();
+        });
+
+        // Xử lý lưu chi tiêu
+        saveButton.setOnClickListener(v -> {
+            String name = nameEditText.getText().toString();
+            String priceString = priceEditText.getText().toString();
+            String note = noteEditText.getText().toString();
+
+            // Kiểm tra thông tin nhập vào
+            if (name.isEmpty() || priceString.isEmpty() || selectedDate[0].isEmpty()) {
+                Toast.makeText(getContext(), "Vui lòng điền đủ thông tin!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                double price = Double.parseDouble(priceString);
+                chiTieu newChiTieu = new chiTieu(name, price, note, selectedDate[0]);
+
+                // Lưu vào cơ sở dữ liệu
+                boolean success = chiTieuDAO.insertItem(newChiTieu);
+                if (success) {
+                    Toast.makeText(getContext(), "Chi tiêu đã được thêm!", Toast.LENGTH_SHORT).show();
+                    loadData(); // Cập nhật lại RecyclerView
+                    alertDialog.dismiss(); // Đóng dialog
+                } else {
+                    Toast.makeText(getContext(), "Thêm chi tiêu thất bại!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (NumberFormatException e) {
+                Toast.makeText(getContext(), "Vui lòng nhập giá trị hợp lệ!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public void showDialogEdit(int position) {
+        chiTieu chiTieu = list.get(position);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.activity_edit_chi_tieu, null);
+        builder.setView(view);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        // Khởi tạo các trường nhập liệu trong dialog
+        EditText nameEditText = view.findViewById(R.id.editName);
+        EditText priceEditText = view.findViewById(R.id.editPrice);
+        EditText noteEditText = view.findViewById(R.id.editNote);
+        TextView dateTextView = view.findViewById(R.id.editDate);
+        Button saveButton = view.findViewById(R.id.btnSave);
+
+        // Đổ dữ liệu chi tiêu vào các EditText
+        nameEditText.setText(chiTieu.getName());
+        priceEditText.setText(String.valueOf(chiTieu.getPrice()));
+        noteEditText.setText(chiTieu.getNote());
+        dateTextView.setText(chiTieu.getDate());
+
+        // Sự kiện cho TextView date để mở DatePickerDialog
+        dateTextView.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view1, year1, month1, dayOfMonth1) -> {
+                // Cập nhật ngày chọn vào TextView
+                String selectedDate = String.format("%d-%02d-%02d", year1, month1 + 1, dayOfMonth1);
+                dateTextView.setText(selectedDate);
+            }, year, month, dayOfMonth);
+
+            datePickerDialog.show();
+        });
+
+        // Xử lý lưu chi tiêu
+        saveButton.setOnClickListener(v -> {
+            String name = nameEditText.getText().toString();
+            String priceString = priceEditText.getText().toString();
+            String note = noteEditText.getText().toString();
+            String date = dateTextView.getText().toString();
+
+            // Kiểm tra thông tin nhập vào
+            if (name.isEmpty() || priceString.isEmpty() || date.isEmpty()) {
+                Toast.makeText(getContext(), "Vui lòng điền đủ thông tin!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                double price = Double.parseDouble(priceString);
+                chiTieu.setName(name);
+                chiTieu.setPrice(price);
+                chiTieu.setNote(note);
+                chiTieu.setDate(date);
+
+                // Cập nhật vào cơ sở dữ liệu
+                boolean success = chiTieuDAO.updateItem(chiTieu.getId(), chiTieu.getName(), chiTieu.getPrice(), chiTieu.getNote(), chiTieu.getDate());
+                if (success) {
+                    Toast.makeText(getContext(), "Chi tiêu đã được cập nhật!", Toast.LENGTH_SHORT).show();
+                    loadData(); // Cập nhật lại RecyclerView
+                    alertDialog.dismiss(); // Đóng dialog
+                } else {
+                    Toast.makeText(getContext(), "Cập nhật chi tiêu thất bại!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (NumberFormatException e) {
+                Toast.makeText(getContext(), "Vui lòng nhập giá trị hợp lệ!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }
 
