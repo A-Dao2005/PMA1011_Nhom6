@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -37,7 +38,18 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.multidex:multidex:2.0.1")
+    implementation ("androidx.core:core:1.9.0")
+
+    //implementation("com.google.android.material:material:1.9.0")
+    //  implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation ("androidx.sqlite:sqlite:2.3.1")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 }

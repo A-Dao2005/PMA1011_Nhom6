@@ -1,0 +1,43 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chế độ: "
+            android:textSize="20sp"
+            android:paddingBottom="8dp" />
+        <androidx.appcompat.widget.SwitchCompat
+            android:text="@string/dark_mode"
+            android:id="@+id/switch_dark_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:textSize="20sp"
+            />
+        <!-- Change Language -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngôn ngữ"
+            android:textSize="20sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp" />
+        <Spinner
+            android:id="@+id/spinner_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            />
+    </LinearLayout>
+</ScrollView>
+
+

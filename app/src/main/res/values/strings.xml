@@ -4,4 +4,6 @@
     <string name="nav_open">Open Drawer</string>
     <string name="nav_close">Close Drawer</string>
     <string name="hello_user">Hello User</string>
+    <string name="dark_mode">Dark Mode</string>
+
 </resources>
