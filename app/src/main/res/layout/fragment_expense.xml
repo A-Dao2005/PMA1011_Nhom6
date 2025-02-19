@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#81B9E6"
+    >
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#81B9E6"
+        android:padding="8dp" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+ THÊM PHÂN LOẠI MỚI"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:gravity="center"
+        app:backgroundTint="@null"
+        android:background="@drawable/button_backgroud"
+        android:layout_margin="20dp"
+        android:padding="16dp" />
+
+
+</LinearLayout>
